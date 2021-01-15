@@ -1,3 +1,4 @@
+import random
 import time
 import pygame
 
@@ -11,13 +12,15 @@ class Game:
 
     start_pos = (50, 50)
 
-    snake = [start_pos, (50,150),(50,200), (50,250), (50,300)]
+    snake = [start_pos, (50,75),(50,100), (50,125), (50,250)]
     snake_length = 1
     direction = 1
 
     win = 0
 
     run = True
+
+    food_location = (200,300)
 
     def move(this):
         if (this.direction == 1):
@@ -61,13 +64,17 @@ class Game:
         for i in self.snake:
             #print(i)
             pygame.draw.rect(self.win,(255,255,255), (i[0] - i[0] % 25, i[1] - i[1] % 25, self.size, self.size))
+        print(self.food_location)
+        pygame.draw.rect(self.win, (255, 0, 0), (self.food_location[0] - self.food_location[0] % 25, self.food_location[1] - self.food_location[1] % 25, self.size, self.size))
 
-    def check_dead(self):
+    def check_state(self):
+        if (self.snake[-1][0] < 0 or self.snake[-1][0] > self.x or self.snake[-1][1] < 0 or self.snake[-1][1] > self.y):
+            return True
         for i in self.snake:
             if self.snake.count(i) > 1:
                 return True
-            if (i[0] < 0 or i[0] > self.x or i[1] < 0 or i[1] > self.y):
-                return True
+            if (i == self.food_location):
+                return "f"
         return False
 
 
@@ -79,8 +86,23 @@ class Game:
 
             pygame.time.delay(100)
 
-            #if this.check_dead() == True:
-                #this.run = False
+            state = this.check_state()
+
+            if state == True:
+                this.run = False
+            elif state == "f":
+                this.snake_length += 1
+                if this.direction == 1:
+                    this.snake.insert(0,(this.snake[0][0], this.snake[0][1]-25))
+                if this.direction == 2:
+                    this.snake.insert(0,(this.snake[0][0]-25, this.snake[0][1]))
+                if this.direction == 3:
+                    this.snake.insert(0,(this.snake[0][0], this.snake[0][1]+25))
+                if this.direction == 4:
+                    this.snake.insert(0,(this.snake[0][0]+25, this.snake[0][1]))
+                a = random.randint(0,this.x)
+                b = random.randint(0, this.y)
+                this.food_location = (a - a%25, b-b%25)
 
             #pygame.draw.rect(this.win,(255,255,255),(200,150,100,50))
 
@@ -104,7 +126,7 @@ class Game:
             this.move()
 
 
-            print(this.snake)
+            #print(this.snake)
 
 
 
