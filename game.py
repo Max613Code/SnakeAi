@@ -30,6 +30,10 @@ class Game:
 
     ai_choice = 0
 
+    choices = []
+
+    draw_ai = False
+
     def move(this):
         if (this.direction == 1):
             this.snake.append((this.snake[-1][0], this.snake[-1][1] - this.size))
@@ -72,7 +76,7 @@ class Game:
         for i in self.snake:
             #print(i)
             pygame.draw.rect(self.win,(255,255,255), (i[0] - i[0] % 25, i[1] - i[1] % 25, self.size, self.size))
-        print(self.food_location)
+        #print(self.food_location)
         pygame.draw.rect(self.win, (255, 0, 0), (self.food_location[0] - self.food_location[0] % 25, self.food_location[1] - self.food_location[1] % 25, self.size, self.size))
 
     def check_state(self):
@@ -88,8 +92,31 @@ class Game:
     def calculted_fitness(self):
         self.fitness = self.score + 0.1 * self.survived
 
+    def get_surrounding(self):
+        current_pos = self.snake[-1]
+        result = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0,],[0,0,0,0,0],[0,0,0,0,0]]
+        for i in range(-2,3):
+            for j in range(-2,3):
+                position = [current_pos[0] + 25 * i, current_pos[1]+ 25 * j]
+                if (position[0], position[1]) == self.food_location:
+                    result[i+2][j+2] = 3
+                elif position[0] == 0 or position[0] == self.x:
+                    result[i+2][j+2] = 1
+                elif position[1] == 0 or position[1] == self.y:
+                    result[i+2][j+2] = 1
+                for k in self.snake:
+                    if k == (position[0], position[1]):
+                        result[i+2][j+2] = 2
+                if (result[i+2][j+2] == None):
+                    position[i+2][j+2] = 0
+
+        return result
+
+
+
     def play_ai(self, ai):
         while self.run:
+
             self.survived += 1
             self.calculted_fitness()
 
@@ -100,19 +127,20 @@ class Game:
             elif state == "f":
                 self.snake_length += 1
                 self.score += 1
-                if self.direction == 1:
-                    self.snake.insert(0,(self.snake[0][0], self.snake[0][1]-25))
-                if self.direction == 2:
-                    self.snake.insert(0,(self.snake[0][0]-25, self.snake[0][1]))
-                if self.direction == 3:
-                    self.snake.insert(0,(self.snake[0][0], self.snake[0][1]+25))
-                if self.direction == 4:
-                    self.snake.insert(0,(self.snake[0][0]+25, self.snake[0][1]))
+                if self.snake[0][1] == self.snake[1][1] + 25:
+                    self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 25))
+                if self.snake[0][0] == self.snake[1][0] - 25:
+                    self.snake.insert(0, (self.snake[0][0] - 25, self.snake[0][1]))
+                if self.snake[0][1] == self.snake[1][1] - 25:
+                    self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 25))
+                if self.snake[0][0] == self.snake[1][0] + 25:
+                    self.snake.insert(0, (self.snake[0][0] + 25, self.snake[0][1]))
                 a = random.randint(0,self.x)
                 b = random.randint(0, self.y)
                 self.food_location = (a - a%25, b-b%25)
 
-            self.choice = ai.get_choice()
+            self.choice = ai.get_choice(self.get_surrounding())
+
 
             if self.choice ==1 and self.direction != 3:
                 self.direction = 1
@@ -123,9 +151,70 @@ class Game:
             elif self.choice == 4 and self.direction != 2:
                 self.direction = 4
 
-            ai.submit_info()
+            self.choices.append(self.choice)
 
-        ai.submit_info()
+            ai.submit_info(self.get_surrounding(),True if state == "f" else False, self.run, self.choices)
+            self.move
+            time.sleep(0.1)
+
+
+
+        ai.submit_info(self.get_surrounding(),True if state == "f" else False, self.run, self.choices)
+
+    def play_draw_ai(self,ai):
+        pygame.event.pump()
+        while self.run:
+            self.survived += 1
+            self.calculted_fitness()
+
+            self.win = pygame.display.set_mode((1000, 500))
+
+            pygame.time.delay(90)
+
+            state = self.check_state()
+
+            if state == True:
+                self.run = False
+            elif state == "f":
+                self.snake_length += 1
+                self.score += 1
+                if self.snake[0][1] == self.snake[1][1] + 25:
+                    self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 25))
+                if self.snake[0][0] == self.snake[1][0] - 25:
+                    self.snake.insert(0, (self.snake[0][0] - 25, self.snake[0][1]))
+                if self.snake[0][1] == self.snake[1][1] - 25:
+                    self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 25))
+                if self.snake[0][0] == self.snake[1][0] + 25:
+                    self.snake.insert(0, (self.snake[0][0] + 25, self.snake[0][1]))
+                a = random.randint(0, self.x)
+                b = random.randint(0, self.y)
+                self.food_location = (a - a % 25, b - b % 25)
+
+            self.draw_board()
+            pygame.display.update()
+
+            self.choice = ai.get_choice(self.get_surrounding())
+
+            if self.choice == 1 and self.direction != 3:
+                self.direction = 1
+            elif self.choice == 2 and self.direction != 4:
+                self.direction = 2
+            elif self.choice == 3 and self.direction != 1:
+                self.direction = 3
+            elif self.choice == 4 and self.direction != 2:
+                self.direction = 4
+
+            self.choices.append(self.choice)
+
+            ai.submit_info(self.get_surrounding(), True if state == "f" else False, self.run, self.choices)
+            self.move()
+            pygame.display.update()
+            time.sleep(0.1)
+
+
+        ai.submit_info(self.get_surrounding(), True if state == "f" else False, self.run, self.choices)
+
+        pygame.quit()
 
     def play_draw(this):
         pygame.event.pump()
@@ -144,13 +233,13 @@ class Game:
             elif state == "f":
                 this.snake_length += 1
                 this.score += 1
-                if this.direction == 1:
+                if this.snake[0][1] == this.snake[1][1] + 25:
                     this.snake.insert(0,(this.snake[0][0], this.snake[0][1]-25))
-                if this.direction == 2:
+                if this.snake[0][0] == this.snake[1][0]-25:
                     this.snake.insert(0,(this.snake[0][0]-25, this.snake[0][1]))
-                if this.direction == 3:
+                if this.snake[0][1] == this.snake[1][1] - 25:
                     this.snake.insert(0,(this.snake[0][0], this.snake[0][1]+25))
-                if this.direction == 4:
+                if this.snake[0][0] == this.snake[1][0]+25:
                     this.snake.insert(0,(this.snake[0][0]+25, this.snake[0][1]))
                 a = random.randint(0,this.x)
                 b = random.randint(0, this.y)
@@ -178,6 +267,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     this.run = False
             this.move()
+            #print(this.get_surrounding())
 
 
             #print(this.snake)
