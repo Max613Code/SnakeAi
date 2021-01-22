@@ -17,28 +17,26 @@ class ai():
 
     model = None
 
-    def submit_info(self, surrounding, food, died, move):
-        if food:
-            print("q")
-            for i in range(3):
-                if len(self.array_of_surroundings) > 3:
-                    self.data.append(self.array_of_surroundings[-1-i])
-                    self.data_result.append(move[-1-i])
-        if not died:
-            for i in surrounding:
-                for j in i:
-                    if (j==1):
-                        print("h")
-                        if len(self.array_of_surroundings) > 3:
-                            self.data.append(self.array_of_surroundings[-1 - j])
-                            self.data_result.append(move[-1 - j])
+    def submit_info(self, surrounding, died, move):
+        print(surrounding)
+        for j in surrounding:
+            for i in j:
+                if (i==3):
+                    if len(self.array_of_surroundings) > 3:
+                        self.data.append(self.array_of_surroundings[-1])
+                        self.data_result.append(move[-1])
+        for i in surrounding:
+            for j in i:
+                if (j==1):
+                    if len(self.array_of_surroundings) > 3:
+                        self.data.append(self.array_of_surroundings[-1])
+                        self.data_result.append(move[-1])
 
-        with open('data.txt', 'w') as file:
+        with open('data.txt', 'a') as file:
             file.write(str(self.data))
 
     def get_choice(self, surrounding):
         self.array_of_surroundings.append(surrounding)
-        print("j")
         print(self.data)
         print(self.data_result)
         if (len(self.data) > 3 and len(numpy.unique(self.data_result)) > 1):
@@ -60,4 +58,4 @@ class ai():
 
             return prediction
         else:
-            return random.choice([1,2,3])
+            return random.choice([1,2,3,4])

@@ -20,7 +20,7 @@ class Game:
 
     run = True
 
-    food_location = (200,300)
+    food_location = (50,200)
 
     score =0
 
@@ -113,7 +113,36 @@ class Game:
         return result
 
 
+    def reset(self):
+        self.x = 500
+        self.y = 500
+        self.size = 25;
 
+        self.squares = int(self.x / self.size)
+
+        self.start_pos = (50, 50)
+
+        self.snake = [self.start_pos, (50, 75), (50, 100), (50, 125), (50, 250)]
+        self.snake_length = 1
+        self.direction = 1
+
+        self.win = 0
+
+        self.run = True
+
+        self.food_location = (50,200)  #(200,300)
+
+        self.score = 0
+
+        self.survived = 0
+
+        self.fitness = 0
+
+        self.ai_choice = 0
+
+        self.choices = []
+
+        self.draw_ai = False
     def play_ai(self, ai):
         while self.run:
 
@@ -153,13 +182,13 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(),True if state == "f" else False, self.run, self.choices)
+            ai.submit_info(self.get_surrounding(), self.run, self.choices)
             self.move
-            time.sleep(0.1)
+            time.sleep(0.05)
 
 
 
-        ai.submit_info(self.get_surrounding(),True if state == "f" else False, self.run, self.choices)
+        ai.submit_info(self.get_surrounding(), self.run, self.choices)
 
     def play_draw_ai(self,ai):
         pygame.event.pump()
@@ -169,7 +198,7 @@ class Game:
 
             self.win = pygame.display.set_mode((1000, 500))
 
-            pygame.time.delay(90)
+            pygame.time.delay(5)
 
             state = self.check_state()
 
@@ -206,13 +235,13 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(), True if state == "f" else False, self.run, self.choices)
+            ai.submit_info(self.get_surrounding(),  self.run, self.choices)
             self.move()
             pygame.display.update()
-            time.sleep(0.1)
+            time.sleep(0.005)
 
 
-        ai.submit_info(self.get_surrounding(), True if state == "f" else False, self.run, self.choices)
+        ai.submit_info(self.get_surrounding(),  self.run, self.choices)
 
         pygame.quit()
 

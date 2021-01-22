@@ -7,5 +7,22 @@ from SnakeAi import ai
 
 Ai = ai.ai()
 ai_game = game.Game()
-ai_game.initialize()
-ai_game.play_draw_ai(Ai)
+
+dataa = []
+dataa_result = []
+
+for i in range(200):
+    del Ai
+    Ai = ai.ai()
+    Ai.data = []
+    Ai.data_result = []
+    del ai_game
+    ai_game = game.Game()
+    ai_game.reset()
+    ai_game.initialize()
+    print(ai_game.fitness)
+    ai_game.play_draw_ai(Ai)
+    dataa += Ai.data
+    dataa_result += Ai.data_result
+
+
