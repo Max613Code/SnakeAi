@@ -160,11 +160,11 @@ class Game:
                 if self.snake[0][1] == self.snake[1][1] + 25:
                     self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 25))
                 if self.snake[0][0] == self.snake[1][0] - 25:
-                    self.snake.insert(0, (self.snake[0][0] - 25, self.snake[0][1]))
+                    self.snake.insert(0, (self.snake[0][0] + 25, self.snake[0][1]))
                 if self.snake[0][1] == self.snake[1][1] - 25:
                     self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 25))
                 if self.snake[0][0] == self.snake[1][0] + 25:
-                    self.snake.insert(0, (self.snake[0][0] + 25, self.snake[0][1]))
+                    self.snake.insert(0, (self.snake[0][0] - 25, self.snake[0][1]))
                 a = random.randint(0,self.x)
                 b = random.randint(0, self.y)
                 self.food_location = (a - a%25, b-b%25)
