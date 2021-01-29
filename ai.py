@@ -23,21 +23,22 @@ class ai():
 
     def submit_info(self, surrounding, died, move):
         #print(surrounding)
-        for j in surrounding:
-            for i in j:
-                if (i==3):
-                    if len(self.array_of_surroundings) > 3:
-                        self.data.append(self.array_of_surroundings[-1])
-                        self.data_result.append(move[-1])
-        for i in surrounding:
-            for j in i:
-                if (j==1):
-                    if len(self.array_of_surroundings) > 3:
-                        self.data.append(self.array_of_surroundings[-1])
-                        self.data_result.append(move[-1])
+        if (random.random() > 0.75):
+            for j in surrounding:
+                for i in j:
+                    if (i==3):
+                        if len(self.array_of_surroundings) > 3:
+                            self.data.append(self.array_of_surroundings[-1])
+                            self.data_result.append(move[-1])
+            for i in surrounding:
+                for j in i:
+                    if (j==1):
+                        if len(self.array_of_surroundings) > 3:
+                            self.data.append(self.array_of_surroundings[-1])
+                            self.data_result.append(move[-1])
 
-        with open('data.txt', 'a') as file:
-            file.write(str(self.data))
+        #with open('data.txt', 'a') as file:
+        #    file.write(str(self.data))
 
     def get_choice(self, surrounding):
         self.array_of_surroundings.append(surrounding)

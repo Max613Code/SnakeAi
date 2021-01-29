@@ -52,7 +52,7 @@ j.game.reset()
 j.game.initialize()
 j.game.play_draw_ai(j)
 
-for ii in range(3):
+for ii in range(5):
     ai_list=[]
     list_fitness = []
 
