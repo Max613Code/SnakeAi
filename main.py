@@ -1,5 +1,5 @@
-from SnakeAi import game
-from SnakeAi import ai
+import game
+import ai
 import numpy as np
 import random
 
@@ -19,7 +19,7 @@ best_ai = []
 highest_scores = []
 random_len = 10
 
-for i in range(25):
+for i in range(5):
     ai_list.append(ai.ai())
     ai_list[i].num = i
 for j in ai_list:
@@ -47,10 +47,13 @@ best_ai.append(ai_list[list_fitness.index(listfc[-2])])
 best_ai.append(ai_list[highest])
 
 j = best_ai[-1]
-j.game = game.Game()
-j.game.reset()
-j.game.initialize()
-j.game.play_draw_ai(j)
+print(j.data, j.data_result)
+for i in range(25):
+    print('qwer')
+    j.game = game.Game()
+    j.game.reset()
+    j.game.initialize()
+    j.game.play_draw_ai(j)
 
 for ii in range(5):
     ai_list=[]
@@ -70,7 +73,7 @@ for ii in range(5):
         j.game.reset()
         j.game.initialize()
         j.game.play_ai(j)
-        for i in range(1):
+        for i in range(2):
             j.game.reset()
             j.game.initialize()
             j.game.play_ai(j)
@@ -90,12 +93,15 @@ for ii in range(5):
     best_ai.append(ai_list[highest])
 
     j = best_ai[-1]
-    j.game = game.Game()
-    j.game.reset()
-    j.game.initialize()
-    j.game.play_draw_ai(j)
+
+    for i in range(5):
+        j.game = game.Game()
+        j.game.reset()
+        j.game.initialize()
+        j.game.play_draw_ai(j)
 
 j = best_ai[-1]
+
 j.game = game.Game()
 j.game.reset()
 j.game.initialize()

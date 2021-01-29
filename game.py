@@ -183,13 +183,13 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(), self.run, self.choices)
+            ai.submit_info(self.get_surrounding(), not self.run, self.choices, state)
             self.move()
             time.sleep(0.05)
 
 
 
-        ai.submit_info(self.get_surrounding(), self.run, self.choices)
+        ai.submit_info(self.get_surrounding(), self.run, self.choices, state)
 
     def play_draw_ai(self,ai):
         pygame.event.pump()
@@ -236,14 +236,14 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(),  self.run, self.choices)
+            ai.submit_info(self.get_surrounding(),  not self.run, self.choices, state)
             self.move()
             pygame.display.update()
-            time.sleep(0.25)
+            time.sleep(0.125)
             #0.005
 
 
-        ai.submit_info(self.get_surrounding(),  self.run, self.choices)
+        ai.submit_info(self.get_surrounding(),  self.run, self.choices, state)
 
         pygame.quit()
 
