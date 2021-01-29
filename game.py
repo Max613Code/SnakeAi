@@ -90,7 +90,8 @@ class Game:
         return False
 
     def calculted_fitness(self):
-        self.fitness = self.score + 0.1 * self.survived
+        self.fitness = 10 * self.score + 0.1 * self.survived
+        return self.fitness
 
     def get_surrounding(self):
         current_pos = self.snake[-1]
@@ -183,7 +184,7 @@ class Game:
             self.choices.append(self.choice)
 
             ai.submit_info(self.get_surrounding(), self.run, self.choices)
-            self.move
+            self.move()
             time.sleep(0.05)
 
 
@@ -238,7 +239,8 @@ class Game:
             ai.submit_info(self.get_surrounding(),  self.run, self.choices)
             self.move()
             pygame.display.update()
-            time.sleep(0.005)
+            time.sleep(0.25)
+            #0.005
 
 
         ai.submit_info(self.get_surrounding(),  self.run, self.choices)

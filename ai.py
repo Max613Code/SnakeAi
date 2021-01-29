@@ -1,6 +1,7 @@
 import numpy
 from sklearn import svm
 import random
+import math
 
 class ai():
     game = 0
@@ -8,17 +9,20 @@ class ai():
     data_result = []
     current_info = [[[],[],[],[],[],[]]]
 
+    num = 0
+
     # 0 for nothing
     #1 for wall
     #2 for snake
     #3 for food
 
     array_of_surroundings = []
+    w=0.5
 
     model = None
 
     def submit_info(self, surrounding, died, move):
-        print(surrounding)
+        #print(surrounding)
         for j in surrounding:
             for i in j:
                 if (i==3):
@@ -37,25 +41,32 @@ class ai():
 
     def get_choice(self, surrounding):
         self.array_of_surroundings.append(surrounding)
-        print(self.data)
-        print(self.data_result)
+        #print(self.data)
+        #print(self.data_result)
         if (len(self.data) > 3 and len(numpy.unique(self.data_result)) > 1):
-            self.model = svm.SVC()
-            ndata = numpy.array(self.data)
-            nsamples, nx, ny = ndata.shape
-            d2_train_dataset = ndata.reshape((nsamples, nx * ny))
+            if (random.random() > self.w):
+                self.model = svm.SVC()
+                ndata = numpy.array(self.data)
+                nsamples, nx, ny = ndata.shape
+                d2_train_dataset = ndata.reshape((nsamples, nx * ny))
 
-            res_data_n = numpy.array(self.data_result).reshape(-1,1)
-            res_data_n = res_data_n.astype(int)
+                res_data_n = numpy.array(self.data_result).reshape(-1,1)
+                res_data_n = res_data_n.astype(int)
 
-            self.model.fit(d2_train_dataset, res_data_n)
+                self.model.fit(d2_train_dataset, res_data_n.ravel())
 
-            ndata = numpy.array([surrounding])
-            nsamples, nx, ny = ndata.shape
-            d2_train_dataset = ndata.reshape((nsamples, nx * ny))
 
-            prediction =  self.model.predict(d2_train_dataset)
+                ndata = numpy.array([surrounding])
+                nsamples, nx, ny = ndata.shape
+                d2_train_dataset = ndata.reshape((nsamples, nx * ny))
 
+                prediction =  self.model.predict(d2_train_dataset)
+            else:
+                prediction = random.choice([1,2,3,4])
+            print("Trained! " + str(self.game.calculted_fitness()) + " " + str(self.num))
+            self.w*=1.5*(1-1/(1+(-1 * math.exp((min(7, (len(self.data))))))))
+            #print(self.w)
+            self.w = min(5,self.w)
             return prediction
         else:
             return random.choice([1,2,3,4])
