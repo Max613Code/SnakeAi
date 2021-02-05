@@ -52,7 +52,7 @@ j.game.reset()
 j.game.initialize()
 j.game.play_draw_ai(j)
 
-for ii in range(5):
+for ii in range(50):
     ai_list=[]
     list_fitness = []
 
@@ -61,7 +61,7 @@ for ii in range(5):
         ai_list[i].num = i
         if ((len(best_ai[-1].data))>random_len):
             ranAI = random.randint(1,3)
-            random_len = int(len(best_ai[-ranAI].data)/2.5)
+            random_len = int(len(best_ai[-ranAI].data)/17)
             randomL = [random.randint(0,len(best_ai[-ranAI].data)) for iii in range(random_len)]
             for j in randomL:
                 ai_list[i].data.append(best_ai[-ranAI].data[j-1])
@@ -90,11 +90,13 @@ for ii in range(5):
     best_ai.append(ai_list[list_fitness.index(listfc[-2])])
     best_ai.append(ai_list[highest])
 
-    j = best_ai[-1]
-    j.game = game.Game()
-    j.game.reset()
-    j.game.initialize()
-    j.game.play_draw_ai(j)
+    for iiii in range(2):
+        a = input()
+        j = best_ai[-1]
+        j.game = game.Game()
+        j.game.reset()
+        j.game.initialize()
+        j.game.play_draw_ai(j)
 
 j = best_ai[-1]
 j.game = game.Game()
