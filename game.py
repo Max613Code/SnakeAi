@@ -95,9 +95,9 @@ class Game:
 
     def get_surrounding(self):
         current_pos = self.snake[-1]
-        result = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0,],[0,0,0,0,0],[0,0,0,0,0]]
-        for i in range(-2,3):
-            for j in range(-2,3):
+        result = [[0 for i in range(9)] for j in range(9)]
+        for i in range(-4,5):
+            for j in range(-4,5):
                 position = [current_pos[0] + 25 * i, current_pos[1]+ 25 * j]
                 if (position[0], position[1]) == self.food_location:
                     result[i+2][j+2] = 3
@@ -183,13 +183,13 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(), self.run, self.choices)
+            ai.submit_info(self.get_surrounding(), self.run, self.choices, state)
             self.move()
             time.sleep(0.05)
 
 
 
-        ai.submit_info(self.get_surrounding(), self.run, self.choices)
+        ai.submit_info(self.get_surrounding(), self.run, self.choices, state)
 
     def play_draw_ai(self,ai):
         pygame.event.pump()
@@ -236,14 +236,14 @@ class Game:
 
             self.choices.append(self.choice)
 
-            ai.submit_info(self.get_surrounding(),  self.run, self.choices)
+            ai.submit_info(self.get_surrounding(),  self.run, self.choices, state)
             self.move()
             pygame.display.update()
             time.sleep(0.25)
             #0.005
 
 
-        ai.submit_info(self.get_surrounding(),  self.run, self.choices)
+        ai.submit_info(self.get_surrounding(),  self.run, self.choices,state)
 
         pygame.quit()
 

@@ -21,15 +21,32 @@ class ai():
 
     model = None
 
-    def submit_info(self, surrounding, died, move):
+    def submit_info(self, surrounding, died, move, state):
         #print(surrounding)
-        if (random.random() > 0.75):
+        if (died):
+            if (random.random() > 0.3):
+                if len(self.data) > 0:
+                    self.data.pop()
+                    self.data_result.pop()
+                return
+        if (random.random() > 0.9):
             for j in surrounding:
                 for i in j:
                     if (i==3):
                         if len(self.array_of_surroundings) > 3:
                             self.data.append(self.array_of_surroundings[-1])
                             self.data_result.append(move[-1])
+                            if (state == "f"):
+                                if (len(self.data) > 3):
+                                    for i in range(3):
+                                        self.data.append(self.array_of_surroundings[-1])
+                                        self.data_result.append(move[-1])
+                                        self.data.append(self.data[-3])
+                                        self.data_result.append(self.data_result[-3])
+                                else:
+                                    for i in range(5):
+                                        self.data.append(self.array_of_surroundings[-1])
+                                        self.data_result.append(move[-1])
             for i in surrounding:
                 for j in i:
                     if (j==1):
