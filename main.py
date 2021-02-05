@@ -2,6 +2,7 @@ import game
 import ai
 import numpy as np
 import random
+import time
 
 #main_game = game.Game()
 #main_game.initialize()
@@ -15,6 +16,7 @@ dataa_result = []
 
 ai_list=[]
 list_fitness = []
+list_avg_fitness = []
 best_ai = []
 highest_scores = []
 random_len = 10
@@ -35,6 +37,8 @@ for j in ai_list:
 for j in ai_list:
     list_fitness.append(j.game.calculted_fitness())
     print(j.game.fitness)
+print(sum(list_fitness)/len(list_fitness))
+time.sleep(5)
 
 highest = list_fitness.index(np.amax(list_fitness))
 listfc = list_fitness.copy()
@@ -48,7 +52,7 @@ best_ai.append(ai_list[highest])
 
 j = best_ai[-1]
 print(j.data, j.data_result)
-for i in range(25):
+for i in range(5):
     print('qwer')
     j.game = game.Game()
     j.game.reset()
@@ -58,12 +62,14 @@ for i in range(25):
 for ii in range(5):
     ai_list=[]
     list_fitness = []
+    list_avg_fitness=[]
 
     for i in range(15):
         ai_list.append(ai.ai())
         ai_list[i].num = i
         if ((len(best_ai[-1].data))>random_len):
             ranAI = random.randint(1,3)
+            random_len = int(len(best_ai[-ranAI].data)/20)
             randomL = [random.randint(0,len(best_ai[-ranAI].data)) for iii in range(random_len)]
             for j in randomL:
                 ai_list[i].data.append(best_ai[-ranAI].data[j-1])
@@ -73,23 +79,28 @@ for ii in range(5):
         j.game.reset()
         j.game.initialize()
         j.game.play_ai(j)
-        for i in range(2):
+        summ=0
+        for i in range(3):
             j.game.reset()
             j.game.initialize()
             j.game.play_ai(j)
+            summ += j.game.calculted_fitness()
+        list_avg_fitness.append(summ/3)
 
     for j in ai_list:
         list_fitness.append(j.game.calculted_fitness())
         print(j.game.fitness)
+    print(sum(list_fitness) / len(list_fitness))
+    time.sleep(5)
 
     highest = list_fitness.index(np.amax(list_fitness))
-    listfc = list_fitness.copy()
+    listfc = list_avg_fitness.copy()
     listfc.sort()
-    highest_scores.append(list_fitness.index(listfc[-3]))
-    highest_scores.append(list_fitness.index(listfc[-2]))
+    highest_scores.append(list_avg_fitness.index(listfc[-3]))
+    highest_scores.append(list_avg_fitness.index(listfc[-2]))
     highest_scores.append(highest)
-    best_ai.append(ai_list[list_fitness.index(listfc[-3])])
-    best_ai.append(ai_list[list_fitness.index(listfc[-2])])
+    best_ai.append(ai_list[list_avg_fitness.index(listfc[-3])])
+    best_ai.append(ai_list[list_avg_fitness.index(listfc[-2])])
     best_ai.append(ai_list[highest])
 
     j = best_ai[-1]

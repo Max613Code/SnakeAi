@@ -55,10 +55,13 @@ class ai():
                                 self.data.append(self.array_of_surroundings[-1])
                                 self.data_result.append(move[-1])
                                 if (state=="f"):
-                                    self.data.append(self.array_of_surroundings[-1])
-                                    self.data_result.append(move[-1])
-                                    self.data.append(self.data[-3])
-                                    self.data_result.append(self.data_result[-3])
+                                    for i in range(random.randint(1,5)):
+                                        self.data.append(self.array_of_surroundings[-1])
+                                        self.data_result.append(move[-1])
+                                        self.data.append(self.array_of_surroundings[-2])
+                                        self.data_result.append(move[-2])
+                                        self.data.append(self.data[-3])
+                                        self.data_result.append(self.data_result[-3])
             for i in surrounding:
                 for j in i:
                     if (j==1):
